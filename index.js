@@ -30,31 +30,28 @@ app.get("/", (req, res) =>{
 })
 // Statistiques par pays
 
-app.post("/by-country", (req, res) =>{
-   try {
-    const country = req.fields.country;
-    //  on stocke dans la variable "country" le nom du pays récupéré dans les paramètres query
+app.post("/by-country", (req, res) => {
+  try {
+    const countryName = req.fields.country;
+    //  on stocke dans la variable "countryName" le nom du pays récupéré dans les paramètres query
     const results = [];
-    for (let i = 0; i < country.length; i++) {
-       if (country === covid[i].name) {
-         // cette condition permet de trouver, dans les données globales, les informations concernant le pays recherché
-         let country = {
-            name: covid[i].name,
-            cases: covid[i].latest_data.confirmed,//nombre de personne atteind
-            deaths: covid[i].latest_data.deaths,// ...     ..         décédées
-            recovered: covid[i].latest_data.recovered//..     ...       guérir
-         };
-         results.push(country);
-
-       }
-        
+    for (let i = 0; i < covid.length; i++) {
+      if (countryName === covid[i].name) {
+        // cette condition permet de trouver, dans les données globales, les informations concernant le pays recherché
+        let country = {
+          name: covid[i].name,
+          cases: covid[i].latest_data.confirmed, // nombre de personnes atteintes
+          deaths: covid[i].latest_data.deaths, // décédés
+          recovered: covid[i].latest_data.recovered // guéris
+        };
+        results.push(country);
+      }
     }
-
     res.json(results);
-   } catch (error) {
-    res.status(404).res.json({message : "it is not fund"})
-   }
-})
+  } catch (error) {
+    res.status(404).json({ message: "it is not found" });
+  }
+});
 
 app.listen(3000 , () =>{
     console.log("Server Started")
